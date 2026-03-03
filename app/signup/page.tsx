@@ -22,7 +22,23 @@ export default function RegisterPage() {
     })
 
     if (error) {
-      setError(error.message)
+      // パスワードが6文字未満
+      if (error.message.includes("Password should be at least")) {
+        setError("パスワードは6文字以上で設定してください。")
+      }
+      // 既に登録済みのメールアドレス
+      else if (error.message.includes("already registered")) {
+        setError("このメールアドレスは既に登録されています。")
+      }
+      // 無効なメール形式
+      else if (error.message.includes("invalid email")) {
+        setError("メールアドレスの形式が正しくありません。")
+      }
+      // それ以外のエラー
+      else {
+        setError("登録中にエラーが発生しました: " + error.message)
+      }
+    
       return
     }
 
