@@ -1,4 +1,4 @@
-# プロジェクト名
+# Task-manager
 
 ## プロジェクト概要
 このプロジェクトは、Next.js（App Router）とSupabaseを使った認証付きタスク管理アプリです。  
