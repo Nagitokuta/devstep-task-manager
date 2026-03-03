@@ -27,7 +27,7 @@ export default function LoginPage() {
     }
 
     if (data.user) {
-      router.push("/tasks")
+      window.location.href = "/tasks"
     }
   }
 

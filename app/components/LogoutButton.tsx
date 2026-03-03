@@ -1,33 +1,30 @@
 "use client"
+
 import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { supabase } from "@/lib/supabase/client"
+import { createBrowserClient } from "@supabase/ssr"
 
 type LogoutButtonProps = {
   className?: string
 }
 
+const supabase = createBrowserClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+)
+
 export default function LogoutButton({ className }: LogoutButtonProps) {
-  const router = useRouter()
   const [loading, setLoading] = useState(false)
 
   const handleLogout = async () => {
     setLoading(true)
-    const { error } = await supabase.auth.signOut()
-    setLoading(false)
-    if (error) {
-      alert("ログアウト失敗: " + error.message)
-    } else {
-      router.push("/login")
-    }
+
+    await supabase.auth.signOut()
+
+    window.location.href = "/login" // ← フルリロード必須
   }
 
   return (
-    <button
-      onClick={handleLogout}
-      disabled={loading}
-      className={className} // 外から渡せるようになった
-    >
+    <button onClick={handleLogout} disabled={loading} className={className}>
       {loading ? "ログアウト中..." : "ログアウト"}
     </button>
   )

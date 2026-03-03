@@ -1,30 +1,37 @@
-"use client"
-
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
-import { supabase } from "@/lib/supabase/client"
+import { createServerClient } from "@supabase/ssr"
+import { cookies } from "next/headers"
+import { redirect } from "next/navigation"
 import LogoutButton from "@/app/components/LogoutButton"
 
-export default function TasksPage() {
-  const router = useRouter()
-  const [userEmail, setUserEmail] = useState<string | null>(null)
-  const [loading, setLoading] = useState(true)
+export default async function TasksPage() {
+  const cookieStore = await cookies()
 
-  useEffect(() => {
-    const checkUser = async () => {
-      const { data } = await supabase.auth.getUser()
-      if (data.user) {
-        setUserEmail(data.user.email ?? null)
-      } else {
-        router.push("/login")
-      }
-      setLoading(false)
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return cookieStore.getAll()
+        },
+        setAll() {
+
+        },
+      },
     }
+  )
 
-    checkUser()
-  }, [router])
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
 
-  if (loading) return <p>Loading...</p>
+  if (!user) {
+    redirect("/login")
+  }
+
+  // const { data: tasks } = await supabase
+  //   .from("tasks")
+  //   .select("*")
 
   return (
 <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -32,8 +39,14 @@ export default function TasksPage() {
     <h1 className="text-2xl font-bold text-center mb-6">Tasks</h1>
 
     <p className="text-center mb-6">
-      ログイン中のユーザー: <span className="font-semibold">{userEmail}</span>
+      ログイン中のユーザー: <span className="font-semibold">{user.email}</span>
     </p>
+
+      {/* <ul>
+        {tasks?.map((task) => (
+          <li key={task.id}>{task.title}</li>
+        ))}
+      </ul> */}
 
     <div className="flex justify-center">
       <LogoutButton className="px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors" />
