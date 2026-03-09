@@ -1,57 +1,30 @@
-import { createServerClient } from "@supabase/ssr"
+import { createServerClient } from "@/utils/supabase/server"
 import { cookies } from "next/headers"
-import { redirect } from "next/navigation"
-import LogoutButton from "@/app/components/LogoutButton"
+import Link from "next/link"
 
 export default async function TasksPage() {
   const cookieStore = await cookies()
+  const supabase = createServerClient(cookieStore)
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll()
-        },
-        setAll() {
-
-        },
-      },
-    }
-  )
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user) {
-    redirect("/login")
-  }
-
-  // const { data: tasks } = await supabase
-  //   .from("tasks")
-  //   .select("*")
+  const { data: task } = await supabase
+    .from("task")
+    .select("id, title")
 
   return (
-<div className="flex items-center justify-center min-h-screen bg-gray-100">
-  <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md">
-    <h1 className="text-2xl font-bold text-center mb-6">Tasks</h1>
+    <>
+      <h1 className="text-2xl font-bold mb-6">タスク一覧</h1>
 
-    <p className="text-center mb-6">
-      ログイン中のユーザー: <span className="font-semibold">{user.email}</span>
-    </p>
-
-      {/* <ul>
-        {tasks?.map((task) => (
-          <li key={task.id}>{task.title}</li>
+      <div className="space-y-2">
+        {task?.map((task) => (
+          <Link
+            key={task.id}
+            href={`/tasks/${task.id}`}
+            className="block border rounded-lg p-4 hover:bg-gray-50"
+          >
+            {task.title}
+          </Link>
         ))}
-      </ul> */}
-
-    <div className="flex justify-center">
-      <LogoutButton className="px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors" />
-    </div>
-  </div>
-</div>
+      </div>
+    </>
   )
 }
