@@ -5,16 +5,25 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { supabase } from "@/lib/supabase/client"
 import AuthCard from "@/app/components/AuthCard"
+import { CheckSquare } from "lucide-react"
+import { LogIn } from "lucide-react"
 
 export default function RegisterPage() {
   const router = useRouter()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
   const [error, setError] = useState<string | null>(null)
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
+
+    // 確認用パスワードが違う
+    if (password !== confirmPassword) {
+       setError("パスワードが一致しません。")
+       return
+    }
 
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -48,35 +57,72 @@ export default function RegisterPage() {
   }
 
   return (
-    <AuthCard title="新規登録">
-      <form onSubmit={handleRegister} className="space-y-4">
-        <input
-          type="email"
-          placeholder="メールアドレス"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-        <input
-          type="password"
-          placeholder="パスワード"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-        <button
-          type="submit"
-          className="w-full bg-green-500 text-white font-semibold py-3 rounded-lg hover:bg-green-600 transition-colors"
-        >
-          新規登録
-        </button>
-      </form>
+    <AuthCard title="">
+    {/* ロゴ */}
+    <div className="text-center mb-6">
+      <div className="flex justify-center mb-2">
+        <CheckSquare className="w-7 h-7 text-blue-600" />
+      </div>
+
+      <h1 className="text-2xl font-bold tracking-tight">
+        TaskManager
+      </h1>
+      <p className="text-sm text-gray-500 mt-1">
+          タスクをシンプルに管理
+      </p>
+    </div>
+
+    <h1 className="text-lg font-semibold mb-4">
+        新規登録
+    </h1>
+
+    <form onSubmit={handleRegister} className="space-y-4">
+
+      <input
+        type="email"
+        placeholder="メールアドレス"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+      />
+
+      <input
+        type="password"
+        placeholder="パスワード"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        required
+        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+      />
+
+      <input
+        type="password"
+        placeholder="パスワード（確認）"
+        value={confirmPassword}
+        onChange={(e) => setConfirmPassword(e.target.value)}
+        required
+        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+      />
+
+      <button
+        type="submit"
+        className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium text-emerald-600 bg-emerald-300 rounded-lg hover:bg-emerald-400 hover:text-white transition cursor-pointer"
+      >
+        新規登録
+      </button>
+
+    </form>
       {error && <p className="text-red-500 text-center mt-4">{error}</p>}
 
-      <p className="text-center mt-4 text-blue-500 hover:underline">
-        <Link href="/login">ログインはこちら</Link>
+      <p className="flex justify-center mt-4">
+        <Link
+          href="/login"
+          className="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 transition"
+        >
+          <LogIn className="w-4 h-4" />
+          ログインはこちら
+        </Link>
       </p>
     </AuthCard>
   )
