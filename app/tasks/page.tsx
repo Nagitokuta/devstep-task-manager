@@ -10,9 +10,7 @@ export default async function TasksPage() {
   const { data: task, error } = await supabase
     .from("task")
     .select("id, title, completed, due_date, createdat")
-
-    console.log(task)
-    console.log(error)
+    .order("createdat", { ascending: false })
 
   return (
     <>

@@ -103,7 +103,7 @@ export default function EditTaskForm({ task }: { task: any }) {
             {/* 更新ボタン */}
             <button
               type="submit"
-              className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium text-white bg-blue-300 rounded-lg hover:bg-blue-400 hover:text-blue-600 transition cursor-pointer"
+              className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium text-white bg-blue-400 rounded-lg hover:bg-blue-500 hover:text-white transition cursor-pointer"
             >
               タスクを更新
             </button>
