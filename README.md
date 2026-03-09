@@ -5,9 +5,11 @@
 このプロジェクトは、Next.js（App Router）とSupabaseを使った認証付きタスク管理アプリです。
 
 - ログイン／新規登録機能（JWT認証）
-- タスク一覧表示、タスク作成
+- タスク一覧表示、タスク作成、タスク編集、タスク削除機能（CRUD）
+- レスポンシブ対応（スマホ・PC両対応）
+- エラー発生時に表示する画面の実装（404 / 500 など）
 - ログアウト機能
-- Tailwind CSSによるレスポンシブデザイン
+- Tailwind CSSによるデザイン
 - Vercelにデプロイ可能
 
 ---
@@ -19,6 +21,17 @@
 - **バックエンド / 認証**: Supabase (PostgreSQL)
 - **デプロイ**: Vercel
 - **その他**: ESLint, Prettier, GitHub Actions（任意）
+
+---
+
+## 実装内容
+
+- タスク一覧表示機能の実装
+- タスク新規作成機能の実装
+- タスク編集機能の実装
+- タスク削除機能の実装
+- レスポンシブ対応（スマホ・PC両対応、画面サイズに応じたレイアウト変更）
+- エラー画面の実装（ログイン必須ページや404/500対応）
 
 ---
 
@@ -53,29 +66,28 @@ npm run dev
 yarn dev
 ```
 
-5. ブラウザで http://localhost:3000 にアクセスして動作確認。
+5. ブラウザで http://localhost:3000にアクセスして動作確認
 
-環境変数の設定方法
+## 環境変数の設定
 
 以下の環境変数を .env.local に設定してください：
 
-```bash
+```
 NEXT_PUBLIC_SUPABASE_URL=<あなたのSupabaseプロジェクトURL>
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<あなたのSupabase匿名キー>
 
-NEXT_PUBLIC_SUPABASE_URL: Supabase プロジェクトのURL
+NEXT_PUBLIC_SUPABASE_URL：Supabase プロジェクトのURL
 
-NEXT_PUBLIC_SUPABASE_ANON_KEY: 公開用匿名キー（クライアントでの認証に使用）
-
+NEXT_PUBLIC_SUPABASE_ANON_KEY：公開用匿名キー（クライアントでの認証に使用）
 ```
 
 注意: .env.local は絶対に Git にコミットしないこと。
 
-デプロイ
+## デプロイ
 
 Vercel に接続すると、自動的にビルドされデプロイされます。
 Vercel 上でも上記の環境変数を設定してください。
 
-ライセンス
+## ライセンス
 
 MIT License
