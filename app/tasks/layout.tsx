@@ -25,20 +25,20 @@ export default async function Layout({
     <div className="min-h-screen bg-gray-100">
 
     {/* 右上ユーザーメニュー */}
-    <div className="flex justify-end p-4">
+    <div className="flex justify-end p-3 sm:p-4">
       <UserMenu email={user.email ?? ""} />
     </div>
 
     {/* 上部中央のアプリ名・アイコン・サブタイトル */}
-    <div className="flex flex-col items-center mt-6 mb-6">
-      <CheckSquare className="w-10 h-10 text-blue-600 mb-2" />
-      <h1 className="text-3xl font-extrabold">TaskManager</h1>
-      <p className="text-gray-500 mt-1 text-sm">タスクをシンプルに管理</p>
+    <div className="flex flex-col items-center mt-4 mb-4">
+      <CheckSquare className="w-8 h-8 sm:w-10 sm:h-10 text-blue-600 mb-1" />
+      <h1 className="text-2xl sm:text-3xl font-extrabold">TaskManager</h1>
+      <p className="text-gray-500 mt-1 text-xs sm:text-sm">タスクをシンプルに管理</p>
     </div>
 
     {/* メインカード */}
-    <div className="flex justify-center">
-      <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-xl">
+    <div className="flex justify-center px-2 sm:px-0">
+      <div className="bg-white shadow-xl rounded-2xl w-full max-w-xl p-6 sm:p-8 mx-auto">
         {children}
       </div>
     </div>
@@ -46,7 +46,7 @@ export default async function Layout({
     {/* 右下タスク追加ボタン */}
     <Link
       href="/tasks/new"
-      className="fixed bottom-6 right-6 bg-blue-500 hover:bg-blue-600 text-white w-14 h-14 flex items-center justify-center rounded-full shadow-lg text-2xl"
+      className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 bg-blue-500 hover:bg-blue-600 text-white w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center rounded-full shadow-lg text-xl sm:text-2xl"
     >
       +
     </Link>

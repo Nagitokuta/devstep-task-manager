@@ -43,73 +43,74 @@ export default function NewTaskPage() {
   }
 
   return (
-<>
-  <div className="max-w-xl mx-auto">
+    <>
+      <div className="max-w-xl mx-auto px-2 sm:px-0">
 
-    <div className="mb-6 space-y-2">
+        <div className="mb-4 sm:mb-6 space-y-2">
 
-<Link
-  href="/tasks"
-  className="inline-flex items-center text-gray-600 hover:text-black"
->
-  <ArrowLeft className="w-5 h-5 mr-1" />
-  タスク一覧へ戻る
-</Link>
+          <Link
+            href="/tasks"
+            className="inline-flex items-center text-xs sm:text-sm text-gray-600 hover:text-black"
+          >
+            <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5 mr-1" />
+            タスク一覧へ戻る
+          </Link>
 
-</div>
-
-    {/* カード */}
-    <div className="bg-white shadow-md rounded-2xl p-6 border">
-
-    <h1 className="text-2xl font-bold mb-2">タスク作成</h1>
-
-      <form onSubmit={handleSubmit} className="space-y-5">
-
-        {/* タイトル */}
-        <div>
-          <label className="text-sm text-gray-500">タイトル</label>
-          <input
-            type="text"
-            placeholder="例：買い物に行く"
-            className="w-full mt-1 border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-          />
         </div>
 
-        {/* 詳細 */}
-        <div>
-          <label className="text-sm text-gray-500">詳細</label>
-          <textarea
-            placeholder="メモや補足を書けます"
-            rows={4}
-            className="w-full mt-1 border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            value={task_detail}
-            onChange={(e) => setTask_detail(e.target.value)}
-          />
+        {/* カード */}
+        <div className="bg-white shadow-md rounded-2xl p-4 sm:p-6 border">
+
+          <h1 className="text-xl sm:text-2xl font-bold mb-2">タスク作成</h1>
+
+          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
+
+            {/* タイトル */}
+            <div>
+              <label className="text-xs sm:text-sm text-gray-500">タイトル</label>
+              <input
+                type="text"
+                placeholder="例：買い物に行く"
+                className="w-full mt-1 border rounded-lg p-2.5 sm:p-3 focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm sm:text-base"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                required
+              />
+            </div>
+
+            {/* 詳細 */}
+            <div>
+              <label className="text-xs sm:text-sm text-gray-500">詳細</label>
+              <textarea
+                placeholder="メモや補足を書けます"
+                rows={4}
+                className="w-full mt-1 border rounded-lg p-2.5 sm:p-3 focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm sm:text-base"
+                value={task_detail}
+                onChange={(e) => setTask_detail(e.target.value)}
+              />
+            </div>
+
+            {/* 期限 */}
+            <div>
+              <label className="text-xs sm:text-sm text-gray-500">期限</label>
+              <DatePicker
+                date={dueDate}
+                setDate={setDueDate}
+              />
+            </div>
+
+            {/* 作成ボタン */}
+            <button
+              type="submit"
+              className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium text-white bg-blue-300 rounded-lg hover:bg-blue-400 hover:text-blue-600 transition cursor-pointer"
+            >
+              タスクを作成
+            </button>
+
+          </form>
+
         </div>
-
-        {/* 期限 */}
-        <div>
-          <label className="text-sm text-gray-500">期限</label>
-          <DatePicker
-           date={dueDate}
-           setDate={setDueDate}
-          />
-        </div>
-
-        {/* 作成ボタン */}
-        <button
-          className="w-full bg-blue-500 text-white py-3 rounded-xl font-semibold hover:bg-blue-600 transition shadow-sm cursor-pointer"
-        >
-          タスクを作成
-        </button>
-
-      </form>
-
-    </div>
-  </div>
-</>
+      </div>
+    </>
   )
 }

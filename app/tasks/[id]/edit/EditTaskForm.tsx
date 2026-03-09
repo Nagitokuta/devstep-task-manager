@@ -39,81 +39,79 @@ export default function EditTaskForm({ task }: { task: any }) {
   }
 
   return (
-<>
-  <div className="max-w-xl mx-auto">
+    <>
+      <div className="max-w-xl mx-auto px-2 sm:px-0">
 
-    {/* ヘッダー */}
-    <Link
-     href={`/tasks/${task.id}`}
-     className="inline-flex items-center text-gray-600 hover:text-black mb-5"
-     >
-     <ArrowLeft className="w-5 h-5 mr-1" />
-     タスク詳細へ戻る
-    </Link>
-
-    {/* カード */}
-    <div className="bg-white shadow-md rounded-2xl border p-6">
-
-    <h1 className="text-2xl font-bold mb-4">タスク編集</h1>
-
-      <form onSubmit={handleSubmit} className="space-y-5">
-
-        {/* タイトル */}
-        <div>
-          <label className="text-sm text-gray-500">タイトル</label>
-
-          <input
-            className="w-full mt-1 border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-        </div>
-
-        {/* 詳細 */}
-        <div>
-          <label className="text-sm text-gray-500">詳細</label>
-
-          <textarea
-            rows={4}
-            className="w-full mt-1 border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            value={task_detail}
-            onChange={(e) => setTask_detail(e.target.value)}
-          />
-        </div>
-
-        {/* 期限 */}
-        <div>
-          <label className="text-sm text-gray-500">期限</label>
-
-          {/* DatePicker使う */}
-          <DatePicker
-            date={dueDate}
-            setDate={setDueDate}
-          />
-        </div>
-
-        {/* 完了チェック */}
-        <label className="flex items-center gap-3 p-3 rounded-lg border hover:bg-gray-50 cursor-pointer">
-          <input
-            type="checkbox"
-            checked={completed}
-            onChange={(e) => setCompleted(e.target.checked)}
-            className="w-4 h-4"
-          />
-          <span className="text-sm font-medium">タスク完了</span>
-        </label>
-
-        {/* 更新ボタン */}
-        <button
-          className="w-full bg-blue-500 text-white py-3 rounded-xl font-semibold hover:bg-blue-600 transition shadow-sm cursor-pointer"
+        {/* ヘッダー */}
+        <Link
+          href={`/tasks/${task.id}`}
+          className="inline-flex items-center text-xs sm:text-sm text-gray-600 hover:text-black mb-4 sm:mb-5"
         >
-          更新する
-        </button>
+          <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5 mr-1" />
+          タスク詳細へ戻る
+        </Link>
 
-      </form>
+        {/* カード */}
+        <div className="bg-white shadow-md rounded-2xl border p-4 sm:p-6">
 
-    </div>
-  </div>
-</>
+          <h1 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">タスク編集</h1>
+
+          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
+
+            {/* タイトル */}
+            <div>
+              <label className="text-xs sm:text-sm text-gray-500">タイトル</label>
+              <input
+                className="w-full mt-1 border rounded-lg p-2.5 sm:p-3 focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm sm:text-base"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </div>
+
+            {/* 詳細 */}
+            <div>
+              <label className="text-xs sm:text-sm text-gray-500">詳細</label>
+              <textarea
+                rows={4}
+                className="w-full mt-1 border rounded-lg p-2.5 sm:p-3 focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm sm:text-base"
+                value={task_detail}
+                onChange={(e) => setTask_detail(e.target.value)}
+              />
+            </div>
+
+            {/* 期限 */}
+            <div>
+              <label className="text-xs sm:text-sm text-gray-500">期限</label>
+              {/* DatePicker */}
+              <DatePicker
+                date={dueDate}
+                setDate={setDueDate}
+              />
+            </div>
+
+            {/* 完了チェック */}
+            <label className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 rounded-lg border hover:bg-gray-50 cursor-pointer text-sm sm:text-base">
+              <input
+                type="checkbox"
+                checked={completed}
+                onChange={(e) => setCompleted(e.target.checked)}
+                className="w-4 h-4"
+              />
+              <span className="font-medium">タスク完了</span>
+            </label>
+
+            {/* 更新ボタン */}
+            <button
+              type="submit"
+              className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium text-white bg-blue-300 rounded-lg hover:bg-blue-400 hover:text-blue-600 transition cursor-pointer"
+            >
+              タスクを更新
+            </button>
+
+          </form>
+
+        </div>
+      </div>
+    </>
   )
 }
