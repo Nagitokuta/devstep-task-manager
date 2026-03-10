@@ -13,31 +13,57 @@ export default function NewTaskPage() {
   const [title, setTitle] = useState("")
   const [task_detail, setTask_detail] = useState("")
   const [dueDate, setDueDate] = useState<Date | undefined>()
+  const [errors, setErrors] = useState<{
+    title?: string
+    task_detail?: string
+  }>({})
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-
-    const {
-        data: { user },
-    } = await supabase.auth.getUser()
-
-    if (!user) {
-        router.push("/login")
-        return
+  
+    const newErrors: {
+      title?: string
+      task_detail?: string
+    } = {}
+  
+    if (!title.trim()) {
+      newErrors.title = "タイトルは必須です"
+    } else if (title.length > 100) {
+      newErrors.title = "タイトルは100文字以内で入力してください"
     }
-
+  
+    if (task_detail.length > 500) {
+      newErrors.task_detail = "詳細は500文字以内で入力してください"
+    }
+  
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors)
+      return
+    }
+  
+    setErrors({})
+  
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+  
+    if (!user) {
+      router.push("/login")
+      return
+    }
+  
     const { error } = await supabase.from("task").insert({
       title,
       task_detail,
       due_date: dueDate ? dueDate.toISOString().split("T")[0] : null,
       user_id: user.id,
     })
-
+  
     if (error) {
       alert(error.message)
       return
     }
-
+  
     router.push("/tasks")
     router.refresh()
   }
@@ -68,26 +94,43 @@ export default function NewTaskPage() {
             {/* タイトル */}
             <div>
               <label className="text-xs sm:text-sm text-gray-500">タイトル</label>
+
               <input
                 type="text"
                 placeholder="例：買い物に行く"
-                className="w-full mt-1 border rounded-lg p-2.5 sm:p-3 focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm sm:text-base"
+                className={`w-full mt-1 border rounded-lg p-2.5 sm:p-3 text-sm sm:text-base focus:outline-none focus:ring-2 ${
+                  errors.title
+                    ? "border-red-500 focus:ring-red-400"
+                    : "focus:ring-blue-400"
+                }`}
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                required
               />
+
+              {errors.title && (
+                <p className="text-red-500 text-xs sm:text-sm mt-1 font-medium">{errors.title}</p>
+              )}
             </div>
 
             {/* 詳細 */}
             <div>
               <label className="text-xs sm:text-sm text-gray-500">詳細</label>
+
               <textarea
                 placeholder="メモや補足を書けます"
                 rows={4}
-                className="w-full mt-1 border rounded-lg p-2.5 sm:p-3 focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm sm:text-base"
+                className={`w-full mt-1 border rounded-lg p-2.5 sm:p-3 text-sm sm:text-base focus:outline-none focus:ring-2 ${
+                  errors.task_detail
+                    ? "border-red-500 focus:ring-red-400"
+                    : "focus:ring-blue-400"
+                }`}
                 value={task_detail}
                 onChange={(e) => setTask_detail(e.target.value)}
               />
+
+              {errors.task_detail && (
+                <p className="text-red-500 text-xs sm:text-sm mt-1 font-medium">{errors.task_detail}</p>
+              )}
             </div>
 
             {/* 期限 */}
