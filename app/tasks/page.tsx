@@ -1,57 +1,96 @@
-import { createServerClient } from "@supabase/ssr"
+import { createServerClient } from "@/utils/supabase/server"
 import { cookies } from "next/headers"
-import { redirect } from "next/navigation"
-import LogoutButton from "@/app/components/LogoutButton"
+import { ClipboardList } from "lucide-react"
+import ToggleComplete from "../components/ToggleComplete"
+import Link from "next/link"
 
 export default async function TasksPage() {
   const cookieStore = await cookies()
+  const supabase = createServerClient(cookieStore)
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll()
-        },
-        setAll() {
-
-        },
-      },
-    }
-  )
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user) {
-    redirect("/login")
-  }
-
-  // const { data: tasks } = await supabase
-  //   .from("tasks")
-  //   .select("*")
+  const { data: task, error } = await supabase
+    .from("task")
+    .select("id, title, completed, due_date, createdat")
+    .order("createdat", { ascending: false })
 
   return (
-<div className="flex items-center justify-center min-h-screen bg-gray-100">
-  <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md">
-    <h1 className="text-2xl font-bold text-center mb-6">Tasks</h1>
-
-    <p className="text-center mb-6">
-      ログイン中のユーザー: <span className="font-semibold">{user.email}</span>
-    </p>
-
-      {/* <ul>
-        {tasks?.map((task) => (
-          <li key={task.id}>{task.title}</li>
-        ))}
-      </ul> */}
-
-    <div className="flex justify-center">
-      <LogoutButton className="px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors" />
+    <>
+    <h1 className="text-xl sm:text-2xl font-bold mb-4 text-center sm:text-left">
+      タスク一覧
+    </h1>
+  
+    {!task || task.length === 0 ? (
+      <div className="flex flex-col items-center justify-center py-12 text-gray-400 px-4">
+        <ClipboardList className="w-10 h-10 mb-3" />
+  
+        <p className="text-base font-medium">タスクがありません</p>
+        <p className="text-sm mt-1">新しいタスクを作成してみましょう</p>
+      </div>
+    ) : (
+      <div className="space-y-2 px-2 sm:space-y-3 sm:px-0">
+      {task.map((task) => (
+        <div
+          key={task.id}
+          className="border rounded-lg p-3 sm:p-4 bg-white hover:shadow-md transition"
+        >
+          <div className="flex items-start gap-3">
+    
+            {/* チェックボックス */}
+            <ToggleComplete
+              id={task.id}
+              completed={task.completed}
+            />
+    
+            {/* タスク内容*/}
+            <Link
+              href={`/tasks/${task.id}`}
+              className="flex-1"
+            >
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                
+                <div className="flex-1">
+                  <h2
+                    className={`text-base sm:text-lg font-semibold ${
+                      task.completed ? "line-through text-gray-400" : ""
+                    }`}
+                  >
+                    {task.title}
+                  </h2>
+    
+                  <div className="flex flex-wrap gap-1 mt-1 text-xs sm:text-sm text-gray-500">
+                    <span
+                      className={`px-2 py-0.5 rounded-full ${
+                        task.completed
+                          ? "bg-green-100 text-green-700"
+                          : "bg-yellow-100 text-yellow-700"
+                      }`}
+                    >
+                      {task.completed ? "完了" : "未完了"}
+                    </span>
+    
+                    {task.due_date && (
+                      <span>
+                        期限: {new Date(task.due_date).toLocaleDateString()}
+                      </span>
+                    )}
+                  </div>
+                </div>
+    
+                <div className="mt-1 sm:mt-0 text-xs text-gray-400 text-right">
+                  <div className="text-left md:text-right">作成日</div>
+                  <div>
+                    {new Date(task.createdat).toLocaleDateString()}
+                  </div>
+                </div>
+    
+              </div>
+            </Link>
+    
+          </div>
+        </div>
+      ))}
     </div>
-  </div>
-</div>
+    )}
+  </>
   )
 }
